@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
 
-  root 'demo#hello'
+  resources :pages do
+    member do
+      get :delete
+    end
+  end
 
   resources :subjects do
     member do
