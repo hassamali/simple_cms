@@ -2,8 +2,12 @@ class PagesController < ApplicationController
 
   layout 'admin'
 
+  before_action :confirm_logged_in
+  before_action :find_subject
+  before_action :set_page_count, :only => [:new, :create, :edit, :update]
+
   def index
-    @pages = Page.all
+    @pages = @subject.pages.sorted
   end
 
   def show
@@ -11,19 +15,16 @@ class PagesController < ApplicationController
   end
 
   def new
-    @page = Page.new
+    @page = Page.new(:subject_id => @subject.id)
   end
 
   def create
-    #instantiate object
     @page = Page.new(page_params)
-    #save object
+    @page.subject = @subject
     if @page.save
-    #redirect and flash notice  if success
-      flash[:notice] = 'Page created'
-      redirect_to(pages_path)
+      flash[:notice] = "Page created successfully."
+      redirect_to(pages_path(:subject_id => @subject.id))
     else
-    #render if fail
       render('new')
     end
   end
@@ -33,39 +34,41 @@ class PagesController < ApplicationController
   end
 
   def update
-    #find the object
     @page = Page.find(params[:id])
-    #update the object
     if @page.update_attributes(page_params)
-    #if success redirect with flash msge
-      flash[:notice] = 'page updated'
-      redirect_to(page_path(@page))
+      flash[:notice] = "Page updated successfully."
+      redirect_to(page_path(@page, :subject_id => @subject.id))
     else
-    #else redirect back render to edit
       render('edit')
     end
-  end  
+  end
 
   def delete
     @page = Page.find(params[:id])
   end
 
   def destroy
-    #find the object
     @page = Page.find(params[:id])
-    #delete the object
     @page.destroy
-    #flash notice 
-    flash[:notice] = 'paged deleted'
-    #redirect to index
-    redirect_to(pages_path)
+    flash[:notice] = "Page destroyed successfully."
+    redirect_to(pages_path(:subject_id => @subject.id))
   end
 
   private
 
   def page_params
-    params.require(:page).permit(:subject_id, :name, :permalink, :position, :visible)
+    params.require(:page).permit(:name, :position, :visible, :permalink)
   end
 
+  def find_subject
+    @subject = Subject.find(params[:subject_id])
+  end
+
+  def set_page_count
+    @page_count = @subject.pages.count
+    if params[:action] == 'new' || params[:action] == 'create'
+      @page_count += 1
+    end
+  end
 
 end
