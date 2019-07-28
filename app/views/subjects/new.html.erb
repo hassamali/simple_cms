@@ -5,26 +5,10 @@
 
   <%= form_for(@subject) do |f| %>
   
-    <table summary="Subject form fields">
-    
-      <tr>
-        <th>Name</th>
-        <td><%= f.text_field(:name) %></td>
-      </tr>
-      
-      <tr>
-        <th>Position</th>
-        <td><%= f.text_field(:position) %></td>
-      </tr>
+    <%= render(:partial => 'form', :locals => {:f => f}) %>
 
-      <tr>
-        <th>Visible</th>
-        <td><%= f.text_field(:visible) %></td>
-      </tr>
-    </table>
-
-   <div class="form-buttons">
-    <%= f.submit("Create Subject") %>
+    <div class="form-buttons">
+      <%= f.submit("Create Subject") %>
 
    </div>
 

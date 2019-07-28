@@ -1,4 +1,7 @@
 class PagesController < ApplicationController
+
+  layout 'admin'
+
   def index
     @pages = Page.all
   end
@@ -57,6 +60,8 @@ class PagesController < ApplicationController
     #redirect to index
     redirect_to(pages_path)
   end
+
+  private
 
   def page_params
     params.require(:page).permit(:subject_id, :name, :permalink, :position, :visible)

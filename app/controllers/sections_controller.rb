@@ -1,4 +1,7 @@
 class SectionsController < ApplicationController
+
+  layout 'admin'
+
   def index
     @sections = Section.all
   end
@@ -54,6 +57,8 @@ class SectionsController < ApplicationController
     flash[:notice] = 'section deleted'
     redirect_to(sections_path)
   end
+
+  private
 
   def section_params
     params.require(:section).permit(:page_id, :name, :position, :visible, :content_type)

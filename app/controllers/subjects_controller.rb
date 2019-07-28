@@ -1,4 +1,7 @@
 class SubjectsController < ApplicationController
+
+  layout 'admin'
+
   def index
     @subjects = Subject.sorted
   end
@@ -54,6 +57,8 @@ class SubjectsController < ApplicationController
     flash[:notice] = 'Subject deleted'
     redirect_to(subjects_path)
   end
+
+  private
   
   def subject_params
     params.require(:subject).permit(:name, :position, :visible)
